@@ -1,17 +1,63 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.google.common.collect.MinMaxPriorityQueue
+import java.util.*
+import kotlin.Comparator
+
 fun main() {
     fun part1(input: List<String>): Int {
-        return input.size
+        var max = Int.MIN_VALUE
+        var elf = 1
+        var i = 1
+        var sum = 0
+        for (line in input) {
+            if (line != "") {
+                sum += line.toInt()
+            } else {
+                if (sum > max) {
+                    elf = i
+                    max = sum
+                } else if (sum == max) {
+                    error("sum == max")
+                }
+                sum = 0
+                i++
+            }
+        }
+        println("elf $elf, max $max")
+        return elf
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        data class ElfCalories(val elf: Int, val cal: Int)
+
+        val topElves: Queue<ElfCalories> = MinMaxPriorityQueue
+            .orderedBy(Comparator<ElfCalories> { o1, o2 -> o1.cal.compareTo(o2.cal) }.reversed())
+            .maximumSize(3)
+            .create();
+
+        var i = 1
+        var sum = 0
+        for (line in input) {
+            if (line != "") {
+                sum += line.toInt()
+            } else {
+                val elfCalories = ElfCalories(i, sum)
+                topElves.add(elfCalories)
+                sum = 0
+                i++
+            }
+        }
+
+        val sumTop3 = topElves.sumOf(ElfCalories::cal)
+
+        println("sumTop3 $sumTop3")
+        println("sumTop1 ${topElves.peek()}")
+        return sumTop3
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
-    println(part1(input))
-    println(part2(input))
+    val testInput = readInput("day01")
+    part1(testInput)
+    part2(testInput)
 }
