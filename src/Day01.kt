@@ -25,6 +25,7 @@ fun main() {
             }
         }
         println("elf $elf, max $max")
+        check(max == 68923)
         return elf
     }
 
@@ -34,7 +35,7 @@ fun main() {
         val topElves: Queue<ElfCalories> = MinMaxPriorityQueue
             .orderedBy(Comparator<ElfCalories> { o1, o2 -> o1.cal.compareTo(o2.cal) }.reversed())
             .maximumSize(3)
-            .create();
+            .create()
 
         var i = 1
         var sum = 0
@@ -53,6 +54,8 @@ fun main() {
 
         println("sumTop3 $sumTop3")
         println("sumTop1 ${topElves.peek()}")
+        check(sumTop3 == 200044)
+
         return sumTop3
     }
 

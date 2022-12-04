@@ -1,8 +1,4 @@
-@file:Suppress("UnstableApiUsage")
-
 import Outcome.*
-import RockPaperScissors.*
-import java.util.*
 
 enum class RockPaperScissors(
     val otherSymbol: String,
@@ -79,7 +75,7 @@ val convertOutcome = Outcome.values().associateBy { it.symbol }
 
 fun main() {
     fun part1(input: List<String>) {
-        var sum = 0;
+        var sum = 0
         for (line in input) {
             val (otherSymbol, mySymbol) = line.split(" ")
             val otherMove = convertFromOtherSymbol[otherSymbol]!!
@@ -92,7 +88,7 @@ fun main() {
     }
 
     fun part2(input: List<String>) {
-        var sum = 0;
+        var sum = 0
         for (line in input) {
             val (otherSymbol, expectedOutcomeSymbol) = line.split(" ")
             val otherMove = convertFromOtherSymbol[otherSymbol]!!
