@@ -8,7 +8,7 @@ fun IntRange.contains(other: IntRange): Boolean {
 }
 
 fun IntRange.overlap(other: IntRange): Boolean {
-    return contains(other.first) || contains(other.last)
+    return other.contains(this) || contains(other.first) || contains(other.last)
 }
 
 fun main() {
@@ -34,7 +34,7 @@ fun main() {
             val (pair1, pair2) = line.split(',')
             val range1 = pair1.toRange()
             val range2 = pair2.toRange()
-            if (range1.overlap(range2) || range2.overlap(range1)) {
+            if (range1.overlap(range2)) {
                 sum++
             }
         }
