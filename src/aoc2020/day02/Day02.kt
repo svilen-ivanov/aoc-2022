@@ -1,4 +1,7 @@
-import Outcome.*
+package aoc2020.day02
+
+import aoc2020.day02.Outcome.*
+import readInput
 
 enum class RockPaperScissors(
     val otherSymbol: String,
@@ -101,7 +104,7 @@ fun main() {
         check(sum == 14416)
     }
 
-    val testInput = readInput("day02")
+    val testInput = readInput("day02/day02")
     part1(testInput)
     part2(testInput)
 }

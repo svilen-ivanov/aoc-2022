@@ -1,6 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+package aoc2020.day01
+
 import com.google.common.collect.MinMaxPriorityQueue
+import readInput
 import java.util.*
 import kotlin.Comparator
 
@@ -60,7 +63,7 @@ fun main() {
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("day01")
+    val testInput = readInput("day01/day01")
     part1(testInput)
     part2(testInput)
 }

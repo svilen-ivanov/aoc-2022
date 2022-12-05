@@ -1,3 +1,7 @@
+package aoc2020.day03
+
+import readInput
+
 fun priority(char: Char): Int {
     return when {
         ('a'..'z').contains(char) -> 1 + char.code - 'a'.code
@@ -49,7 +53,7 @@ fun main() {
         check(sum == 2716)
     }
 
-    val testInput = readInput("day03")
+    val testInput = readInput("day03/day03")
     part1(testInput)
     part2(testInput)
     part2fp(testInput)

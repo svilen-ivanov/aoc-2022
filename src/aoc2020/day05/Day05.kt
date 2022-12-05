@@ -1,3 +1,7 @@
+package aoc2020.day05
+
+import readInput
+
 fun parseConfig(input: List<String>): List<ArrayDeque<String>> {
     val stacks = mutableListOf<ArrayDeque<String>>()
 
@@ -67,7 +71,7 @@ fun main() {
         check(result == "NHWZCBNBF")
     }
 
-    val testInput = readInput("day05")
+    val testInput = readInput("day05/day05")
     part1(testInput)
     part2(testInput)
 }

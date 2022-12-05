@@ -1,3 +1,7 @@
+package aoc2020.day04
+
+import readInput
+
 fun String.toRange(): IntRange {
     val startEnd = split('-').map { it.toInt() }
     return startEnd[0]..startEnd[1]
@@ -42,7 +46,7 @@ fun main() {
         check(sum == 839)
     }
 
-    val testInput = readInput("day04")
+    val testInput = readInput("day04/day04")
     part1(testInput)
     part2(testInput)
 }
