@@ -1,4 +1,4 @@
-package aoc2020.day09
+package aoc2020.day10
 
 import readInput
 
@@ -9,7 +9,7 @@ fun main() {
     fun part2(input: List<String>) {
     }
 
-    val testInput = readInput("day09/day09")
+    val testInput = readInput("day10/day10s")
     part1(testInput)
     part2(testInput)
 }
