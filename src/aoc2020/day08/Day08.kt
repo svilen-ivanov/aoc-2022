@@ -1,9 +1,8 @@
-@file:OptIn(ExperimentalStdlibApi::class)
-
 package aoc2020.day08
 
 import readInput
 
+@OptIn(ExperimentalStdlibApi::class)
 fun main() {
     fun part1(input: List<String>) {
         val map: MutableList<List<Int>> = mutableListOf()
