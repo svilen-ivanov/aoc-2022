@@ -1,12 +1,18 @@
-package aoc2020.day10
+package aoc2020.day11
 
+import org.apache.commons.math3.primes.Primes
 import readInput
 import java.math.BigInteger
 
 var itemCount = 1
+val processCount = 10000
 
-class Item(var worryLevel: BigInteger) {
+class Item(val worryLevelNum: BigInteger) {
     val id = itemCount++
+
+    //    val worryLevel = WorryLevel(id, worryLevelNum)
+    val worryLevel: WorryLevel = OptimizedWorryLevel(id, worryLevelNum)
+//    val worryLevel: WorryLevel = NaiveWorryLevel(id, worryLevelNum)
 
     fun bored() {
 //        worryLevel /= 3
@@ -56,31 +62,92 @@ class Monkey(val num: Int) {
     }
 
     override fun toString(): String {
-//        return "Monkey $num: ${items.map { it.worryLevel}.joinToString(", ")}"
-        return "Monkey $num"
+        return "Monkey $num inspected items $inspectCount times"
+    }
+}
+
+interface WorryLevel {
+    fun plus(v: BigInteger)
+    fun mul(v: BigInteger)
+    fun square()
+    fun isDivisible(div: BigInteger): Boolean
+}
+
+class NaiveWorryLevel(
+    private val id: Int,
+    private val startLevel: BigInteger
+) : WorryLevel {
+    private var currentLevel = startLevel
+
+    override fun plus(v: BigInteger) {
+        currentLevel += v
     }
 
+    override fun mul(v: BigInteger) {
+        currentLevel *= v
+    }
 
+    override fun square() {
+        currentLevel *= currentLevel
+    }
+
+    override fun isDivisible(div: BigInteger): Boolean {
+        return currentLevel.remainder(div) == BigInteger.ZERO
+    }
+
+    override fun toString(): String {
+        return "Level for item #$id ($startLevel): $currentLevel"
+    }
+}
+
+class OptimizedWorryLevel(val id: Int, val startLevel: BigInteger) : WorryLevel {
+    val mod = 9699690.toBigInteger()
+    private var currentLevel = startLevel
+
+    override fun plus(v: BigInteger) {
+        currentLevel += v
+        currentLevel = currentLevel.mod(mod)
+    }
+
+    override fun mul(v: BigInteger) {
+        currentLevel *= v
+        currentLevel = currentLevel.mod(mod)
+
+    }
+
+    override fun square() {
+        currentLevel *= currentLevel
+        currentLevel = currentLevel.mod(mod)
+
+    }
+
+    override fun isDivisible(div: BigInteger): Boolean {
+        return currentLevel.remainder(div) == BigInteger.ZERO
+    }
+
+    override fun toString(): String {
+        return "Level for item #$id ($startLevel): $currentLevel"
+    }
 }
 
 sealed class Op {
     abstract fun apply(item: Item)
 
-    data class Plus(val const: BigInteger): Op() {
+    data class Plus(val const: BigInteger) : Op() {
         override fun apply(item: Item) {
-            item.worryLevel += const
+            item.worryLevel.plus(const)
         }
     }
 
-    data class Mul(val const: BigInteger): Op() {
+    data class Mul(val const: BigInteger) : Op() {
         override fun apply(item: Item) {
-            item.worryLevel *= const
+            item.worryLevel.mul(const)
         }
     }
 
-    object Square: Op() {
+    object Square : Op() {
         override fun apply(item: Item) {
-            item.worryLevel = item.worryLevel.modPow(2, )
+            item.worryLevel.square()
         }
 
         override fun toString(): String {
@@ -96,53 +163,24 @@ fun main() {
         }
     }
 
-
-    val d2 = 2.toBigInteger()
-    val d3 = 3.toBigInteger()
-    val d5 = 5.toBigInteger()
-    val primes = listOf(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97).map { it.toBigInteger() }.toSet()
-    fun isEven(n: BigInteger) = !n.testBit(0)
-    fun isDiv(n: BigInteger, divisor: BigInteger) = n.mod(divisor) == BigInteger.ZERO
-    fun isDivBy3(n: BigInteger) = !isEven(n) && isDiv(n, d3)
-    fun isDivBy7(n: BigInteger) = !isEven(n) && isDiv(n, d5)
-
-    fun isDivisible(n: BigInteger, divisor: BigInteger): Boolean {
-        return when  {
-//            divisor == BigInteger.ONE -> true
-//            divisor == d2 -> isEven(n)
-//            divisor == d3 -> isDivBy3(n)
-//            divisor == d5 -> isDivBy5(n)
-//            primes.contains(divisor) -> n != divisor && n != BigInteger.ONE
-//            d2.isPProbablePrime()
-            else -> isDiv(n, divisor)
-        }
-//        return
-
-    }
-
     fun round(monkeys: List<Monkey>) {
-//        val appends = mutableMapOf<Int, MutableList<Item>>()
+        val monkeyByNum = monkeys.associateBy { it.num }
         for (monkey in monkeys) {
             for (item in monkey.items) {
                 monkey.op.apply(item)
                 monkey.inspectCount++
                 item.bored()
-                val x = item.worryLevel.remainder(monkey.divBy)
-                val nextMonkeyNum = if (x == BigInteger.ZERO) {
+                val result = item.worryLevel.isDivisible(monkey.divBy)
+                val nextMonkeyNum = if (result) {
                     monkey.trueMonkey
                 } else {
                     monkey.falseMonkey
                 }
-                val nextMonkey = monkeys.single { it.num == nextMonkeyNum }
+                val nextMonkey = monkeyByNum[nextMonkeyNum]!!
                 nextMonkey.items.add(item)
             }
             monkey.items = mutableListOf()
         }
-
-//        for (monkey in monkeys) {
-//            val newItems = appends[monkey.num] ?: emptyList()
-//            monkey.items = newItems.toMutableList()
-//        }
     }
 
     fun part1(input: List<String>) {
@@ -167,7 +205,7 @@ fun main() {
                     Op.Square
                 } else if (left == "old" && opStr == "+" && right.all { it.isDigit() }) {
                     Op.Plus(right.toBigInteger())
-                } else if (left == "old" && opStr == "*" && right.all {it.isDigit()}) {
+                } else if (left == "old" && opStr == "*" && right.all { it.isDigit() }) {
                     Op.Mul(right.toBigInteger())
                 } else {
                     error("")
@@ -192,33 +230,26 @@ fun main() {
             }
         }
 
-//        printMonkeys(monkeys)
-//        println("-------")
-        repeat(20) {
+        val divizors = monkeys.map { it.divBy }.fold(BigInteger.ONE) { acc, bigInteger ->  acc * bigInteger }
+        println(divizors)
+
+        repeat(processCount) {
             println("----- Round ${it + 1}")
             round(monkeys)
-//            println("----- After round ${it + 1}")
-//            printMonkeys(monkeys)
-//            monkeys.forEach {
-//                println("$it: Inspect count ${it.inspectCount}")
-//            }
+            println("----- After round ${it + 1}")
+            printMonkeys(monkeys)
         }
-//        round(monkeys)
-        println("-------")
-        monkeys.forEach {
-            println("$it: Inspect count ${it.inspectCount}")
-        }
-        println("-------\nMostActive\n---------------")
-        val mostActive = monkeys.sortedByDescending { it.inspectCount }
+        println("-----------\nMostActive\n---------------")
+        val mostActive = monkeys.sortedByDescending { it.inspectCount }.take(2)
         printMonkeys(mostActive)
-        println(mostActive[0].inspectCount * mostActive[1].inspectCount )
+        println("Total: ${mostActive[0].inspectCount * mostActive[1].inspectCount}")
 
     }
 
     fun part2(input: List<String>) {
     }
 
-    val testInput = readInput("day11/day11s")
+    val testInput = readInput("day11/day11")
     part1(testInput)
-    part2(testInput)
+//    part2(testInput)
 }
