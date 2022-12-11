@@ -1,6 +1,5 @@
 package aoc2020.day11
 
-import org.apache.commons.math3.primes.Primes
 import readInput
 import java.math.BigInteger
 
