@@ -1,4 +1,4 @@
-package aoc2020.day07
+package aoc2022.day07
 
 import readInput
 

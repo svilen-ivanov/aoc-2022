@@ -1,4 +1,4 @@
-package aoc2020.day09
+package aoc2022.day09
 
 import readInput
 import kotlin.math.absoluteValue

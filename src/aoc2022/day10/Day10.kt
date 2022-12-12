@@ -1,4 +1,4 @@
-package aoc2020.day10
+package aoc2022.day10
 
 import readInput
 import kotlin.math.abs

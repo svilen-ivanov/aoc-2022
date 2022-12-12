@@ -1,4 +1,4 @@
-package aoc2020.day12
+package aoc2022.day12
 
 data class Edge(val from: Int, val to: Int, val weight: Int)
 

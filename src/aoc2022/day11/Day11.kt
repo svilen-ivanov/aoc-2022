@@ -1,4 +1,4 @@
-package aoc2020.day11
+package aoc2022.day11
 
 import readInput
 import java.math.BigInteger

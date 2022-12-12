@@ -1,4 +1,4 @@
-package aoc2020.day12
+package aoc2022.day12
 
 import com.google.common.base.Stopwatch
 import org.jetbrains.kotlinx.multik.api.d2array

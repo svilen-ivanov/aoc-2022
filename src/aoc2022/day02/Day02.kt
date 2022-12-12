@@ -1,6 +1,6 @@
-package aoc2020.day02
+package aoc2022.day02
 
-import aoc2020.day02.Outcome.*
+import aoc2022.day02.Outcome.*
 import readInput
 
 enum class RockPaperScissors(

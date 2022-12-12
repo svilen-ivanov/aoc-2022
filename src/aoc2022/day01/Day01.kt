@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-package aoc2020.day01
+package aoc2022.day01
 
 import com.google.common.collect.MinMaxPriorityQueue
 import readInput
